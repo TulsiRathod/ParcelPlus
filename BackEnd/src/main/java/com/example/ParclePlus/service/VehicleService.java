@@ -5,6 +5,8 @@ import com.example.ParclePlus.repository.VehicleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class VehicleService {
 
@@ -19,5 +21,10 @@ public class VehicleService {
 
     public Vehicle getVehicleById(int vehicleId) {
         return vehicleRepository.findById(vehicleId).orElse(null);
+    }
+
+    // New method to get all vehicles
+    public List<Vehicle> getAllVehicles() {
+        return vehicleRepository.findAll();
     }
 }

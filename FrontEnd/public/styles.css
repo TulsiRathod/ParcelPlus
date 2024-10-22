@@ -1,0 +1,743 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+body::-webkit-scrollbar{
+  display:none;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Minimum height of 100% viewport height */
+}
+
+.content-wrapper {
+  flex: 1; /* This will take up the remaining height between Header and Footer */
+}
+
+/* Header Styles */
+header {
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative; /* To manage mobile nav positioning */
+}
+
+header h1 {
+  color: #0073e6;
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Default Navbar for large screens */
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* Hide mobile nav by default */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  background-color: #fff;
+  width: 100%;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-direction: column;
+}
+
+.mobile-nav ul li {
+  text-align: center;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+}
+
+.mobile-nav ul li a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+/* Menu Toggle Button */
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+}
+
+.menu-toggle i {
+  font-size: 24px;
+  color: #333;
+}
+
+/* Responsive Styles for Mobile */
+@media (max-width: 768px) {
+  nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex; /* Show toggle on mobile */
+  }
+
+  .mobile-nav {
+    display: flex; /* Show mobile menu when toggle is clicked */
+  }
+}
+
+/* Small Screen Adjustments */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 20px;
+  }
+}
+
+
+/* Footer Styles */
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+  padding: 2px;
+}
+
+.footer-content a {
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  footer {
+    font-size: 20px;
+  }
+}
+
+/* TrackShipment Component */
+.track-shipment {
+  background-color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.track-shipment h3 {
+  font-size: 36px;
+  color: #0073e6;
+  margin-bottom: 0;
+}
+
+.track-shipment input[type="text"] {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin: 20px;
+}
+
+.track-shipment button {
+  padding: 10px 20px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* HeroSection Component */
+.hero-section {
+  background-image: url('./assets/images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero-section h2 {
+  font-size: 36px;
+  color: #fff;
+}
+
+.hero-section p {
+  font-size: 18px;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+/* Form Section (For Login, Register, Driver Register/Login) */
+.form-section {
+  background-color: #fff;
+  padding: 40px 20px;
+  max-width: 400px;
+  margin: 40px auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h3 {
+  font-size: 28px;
+  color: #0073e6;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-section input[type="text"],
+.form-section input[type="email"],
+.form-section input[type="password"],
+.form-section select {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-section button {
+  padding: 10px 20px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.form-section .toggle-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.form-section .toggle-link a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .form-section {
+    max-width: 90%;
+  }
+
+  .form-section h3 {
+    font-size: 24px;
+  }
+
+  .track-shipment input[type="text"] {
+    width: auto;
+  }
+
+  .track-shipment button {
+    width: 100%;
+  }
+}
+
+
+/* User Home */
+
+.after-login-page {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.left-panel {
+  width: 30%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.left-panel h2 {
+  font-size: 28px;
+  color: #000;
+}
+
+.left-panel p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.left-panel form {
+  display: flex;
+  flex-direction: column;
+}
+
+.left-panel form input[type="text"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.left-panel form div {
+  margin-bottom: 10px;
+}
+
+.left-panel form button {
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.left-panel form label {
+  margin-right: 10px;
+}
+
+.map-container {
+  width: 65%;
+  height: 500px;
+}
+
+@media screen and (max-width: 768px) {
+  .after-login-page {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .map-container {
+    width: 100%;
+  }
+}
+
+/* User Home */
+
+.user-home-container {
+  display: flex;
+  height: 80vh;
+  background-color: #f4f4f4;
+  font-family: 'Arial', sans-serif;
+  flex-direction: row;
+}
+
+/* Map Section */
+.map-section {
+  flex: 2;
+  width: 40%;
+  position: relative;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: auto;
+  flex: 1;
+  padding: 30px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.sidebar h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.sidebar p {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Input Group Styles */
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.input-group input {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 90%;
+  width: 100%;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.input-group select {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 95%;
+  width: 100%;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #0073e6;
+}
+
+.confirm-button {
+  background-color: #28a745; /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Add padding */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Font size */
+  font-weight: bold; /* Bold text */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.confirm-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.confirm-button:disabled {
+  background-color: #6c757d; /* Gray background when disabled */
+  cursor: not-allowed; /* Show disabled cursor */
+}
+
+
+/* Actions Styles */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 12px 20px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.actions button:hover {
+  background-color: #005bb5;
+}
+
+.actions button.clear {
+  background-color: #ff4d4d;
+}
+
+.actions button.clear:hover {
+  background-color: #cc0000;
+}
+
+/* Route Info Styles */
+.route-info {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.route-info p {
+  font-size: 16px;
+  color: #444;
+  margin: 0;
+}
+
+.route-info button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.route-info button:hover {
+  background-color: #005bb5;
+}
+
+/* Responsive Styles for Mobile */
+@media screen and (max-width: 768px) {
+  .user-home-container {
+    flex-direction: column;
+    height: 1000px;
+  }
+
+  .sidebar {
+    width: auto;
+    margin-bottom: 20px;
+  }
+
+  .map-section {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+/* Bookings  */
+
+
+.user-bookings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px; /* Add padding for better spacing on mobile */
+}
+
+.bookings-table {
+  width: 100%; /* Make the table take full width on smaller screens */
+  max-width: 1000px; /* Max width for larger screens */
+  margin: 0 auto; /* Center the table */
+  border-collapse: collapse;
+  overflow-x: auto; /* Allow horizontal scrolling on small screens */
+}
+
+.bookings-table th, .bookings-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.bookings-table th {
+  background-color: #f4f4f4;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+}
+
+.page-button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+}
+
+.page-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.page-button:hover {
+  background-color: #f0f0f0;
+}
+
+.confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dim the background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+}
+
+.confirm-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  padding: 10px 20px;
+  background-color: #ccc;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .bookings-table th, .bookings-table td {
+    font-size: 14px; /* Reduce font size on smaller screens */
+    padding: 6px;
+  }
+
+  .bookings-table {
+    display: block; /* Display table as block for better scrolling on small screens */
+    overflow-x: auto; /* Horizontal scroll if table is too wide */
+  }
+
+  /* .pagination {
+    flex-direction: column; /* Stack pagination buttons vertically on mobile */
+  /* } */ */
+
+  .page-button {
+    margin: 5px 0; /* Adjust margin for stacked buttons */
+  }
+}
+
+.driver-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bookings-table {
+  width: 100%;
+  max-width: 1000px; /* Control maximum width of the table */
+  border-collapse: collapse;
+  margin: 20px 0;
+  overflow-x: auto; /* Ensure horizontal scrolling on small screens */
+}
+
+.bookings-table th, .bookings-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.bookings-table th {
+  background-color: #f4f4f4;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+}
+
+.page-button {
+  padding: 5px 10px;
+  margin: 5px; /* Adjust margin for better spacing */
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+}
+
+.page-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.page-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .bookings-table th, .bookings-table td {
+    font-size: 14px; /* Reduce font size on smaller screens */
+    padding: 6px;
+  }
+
+  .bookings-table {
+    display: block;
+    overflow-x: auto; /* Allow horizontal scroll if table is too wide */
+  }
+
+  .page-button {
+    margin: 5px 0; /* Adjust margin for stacked buttons */
+  }
+}
+
+.driver-now-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.start-button, .stop-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.start-button {
+  background-color: green;
+  color: white;
+}
+
+.stop-button {
+  background-color: red;
+  color: white;
+}
+
+.start-button:hover {
+  background-color: darkgreen;
+}
+
+.stop-button:hover {
+  background-color: darkred;
+}
+  

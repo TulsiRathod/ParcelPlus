@@ -19,6 +19,6 @@ public class VehicleTracking {
     @JoinColumn(name = "driver_id")
     private Driver driver;
 
-    private String location; // Geography/Point type for real-time tracking
+    private String location; // Store the location
     private Timestamp timestamp;
 }

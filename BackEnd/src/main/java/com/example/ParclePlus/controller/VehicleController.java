@@ -5,6 +5,8 @@ import com.example.ParclePlus.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/vehicles")
 public class VehicleController {
@@ -20,5 +22,11 @@ public class VehicleController {
     @GetMapping("/{vehicleId}")
     public Vehicle getVehicleById(@PathVariable int vehicleId) {
         return vehicleService.getVehicleById(vehicleId);
+    }
+
+    // New endpoint to get all vehicles
+    @GetMapping("/all")
+    public List<Vehicle> getAllVehicles() {
+        return vehicleService.getAllVehicles();
     }
 }
