@@ -8,24 +8,33 @@ const DriverHome = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1); // To store total pages
-  const [vehicleType, setVehicleType] = useState(''); // To store the selected vehicle type
 
   const pageSize = 5; // Number of bookings to display per page
   const navigate = useNavigate(); // Hook to navigate
 
-  // Fetch bookings when page or vehicle type changes
-  useEffect(() => {
-    fetchBookings(currentPage, vehicleType);
-  }, [currentPage, vehicleType]);
+  // Fetch driver's vehicle types from local storage (assumed to be a comma-separated string)
+  const driverVehicleType = localStorage.getItem('vehicleType'); // Assuming vehicleType is stored in localStorage after login
+  const driverVehicleTypesArray = driverVehicleType?.split(',').map(type => type.trim()); // Split into array and trim whitespace
 
-  const fetchBookings = async (page, vehicleType) => {
+  // Fetch bookings when page changes
+  useEffect(() => {
+    fetchBookings(currentPage);
+  }, [currentPage]);
+
+  const fetchBookings = async (page) => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/bookings/without-driver`, {
-        params: { page, size: pageSize, vehicleType },
+        params: { page, size: pageSize },
       });
-      setBookings(response.data.content);
+
+      // Filter jobs based on the driver's vehicle type array
+      const filteredBookings = response.data.content.filter(
+        (booking) => driverVehicleTypesArray.includes(booking.vehicle.type)
+      );
+
+      setBookings(filteredBookings); // Set only the filtered bookings
       setTotalPages(response.data.totalPages);
       setLoading(false);
     } catch (error) {
@@ -38,20 +47,16 @@ const DriverHome = () => {
     setCurrentPage(page);
   };
 
-  const handleVehicleTypeChange = (e) => {
-    setVehicleType(e.target.value);
-  };
-
   const handleAcceptJob = async (bookingId) => {
     try {
       const driverId = localStorage.getItem('driverId'); // Driver ID from localStorage
       await axios.put(`${process.env.REACT_APP_API_BASE_URL}/bookings/${bookingId}/assign-driver/${driverId}`);
-      
+
       // Save the current booking ID in localStorage
       localStorage.setItem('currentBookingId', bookingId);
 
       // Redirect to DriverNow page
-      navigate('/partner-now');
+      navigate('/partner-jobs');
     } catch (error) {
       console.error('Error accepting job:', error);
       alert('Failed to accept the job.');
@@ -66,7 +71,7 @@ const DriverHome = () => {
       ) : error ? (
         <p>{error}</p>
       ) : bookings.length === 0 ? (
-        <p>No bookings available.</p>
+        <p>No jobs available.</p>
       ) : (
         <>
           <table className="bookings-table">
@@ -90,7 +95,7 @@ const DriverHome = () => {
                   <td>{booking.pickupCity || booking.pickupLocation}</td>
                   <td>{booking.dropoffCity || booking.dropoffLocation}</td>
                   <td>{booking.vehicle.type}</td>
-                  <td>${booking.estimatedCost}</td>
+                  <td>₹{booking.estimatedCost}</td>
                   <td>{booking.status}</td>
                   <td>
                     <button onClick={() => handleAcceptJob(booking.bookingId)}>Accept Job</button>

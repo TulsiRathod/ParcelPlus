@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+import java.util.Optional;
+
 @Service
 public class BookingService {
 
@@ -55,5 +58,23 @@ public class BookingService {
         booking.setDriver(driver);
         booking.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
         return bookingRepository.save(booking);
+    }
+
+    // **Update Booking Status**
+    @Transactional
+    public Booking updateBookingStatus(int bookingId, String status) {
+        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
+        if (!bookingOpt.isPresent()) {
+            throw new IllegalArgumentException("Booking not found");
+        }
+
+        Booking booking = bookingOpt.get();
+        booking.setStatus(status);
+        booking.setUpdatedAt(new java.sql.Timestamp(System.currentTimeMillis())); // Update timestamp
+        return bookingRepository.save(booking);
+    }
+
+    public long getTotalCompletedBookings() {
+        return bookingRepository.countCompletedBookings();
     }
 }

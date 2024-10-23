@@ -4,7 +4,10 @@ import com.example.ParclePlus.entity.Booking;
 import com.example.ParclePlus.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -55,5 +58,21 @@ public class BookingController {
     @PutMapping("/{bookingId}/assign-driver/{driverId}")
     public Booking assignDriver(@PathVariable int bookingId, @PathVariable int driverId) {
         return bookingService.assignDriver(bookingId, driverId);
+    }
+
+    // **Update Booking Status**
+    @PutMapping("/{bookingId}/update-status")
+    public ResponseEntity<Booking> updateBookingStatus(
+            @PathVariable int bookingId,
+            @RequestBody Map<String, String> statusMap) {
+
+        String status = statusMap.get("status");
+        Booking updatedBooking = bookingService.updateBookingStatus(bookingId, status);
+        return ResponseEntity.ok(updatedBooking);
+    }
+
+    @GetMapping("/completed/count")
+    public long getTotalCompletedBookings() {
+        return bookingService.getTotalCompletedBookings();
     }
 }

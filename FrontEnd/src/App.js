@@ -13,8 +13,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFound from './pages/NotFound';
 import UserBookings from './pages/UserBookings';
 import DriverHome from './pages/DriverHome';
-import DriverNow from './pages/DriverNow';
 import UserTrackDriver from './pages/UserTrackDriver';
+import DriverJobs from './pages/DriverJobs';
+import VehicleManagement from './pages/VehicleManagement';
+import DriverManagement from './pages/DriverManagement';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -32,8 +35,11 @@ function App() {
             <Route path="/user-home" element={<UserHome />} />
             <Route path="/user-bookings" element={<UserBookings />} />
             <Route path="/partner-home" element={<DriverHome />} />
-            <Route path="/partner-now" element={<DriverNow />} />
             <Route path="/track-driver" element={<UserTrackDriver />} />
+            <Route path="/partner-jobs" element={<DriverJobs />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin-vehicle" element={<VehicleManagement />} />
+            <Route path="/admin-driver" element={<DriverManagement />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

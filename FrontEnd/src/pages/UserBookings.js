@@ -22,7 +22,14 @@ const UserBookings = () => {
             size: bookingsPerPage
           }
         });
-        setBookings(response.data.content); // content contains the list of bookings
+        
+        // Custom sorting for booking statuses: 'IN_PROGRESS', 'PENDING', 'COMPLETED'
+        const sortedBookings = response.data.content.sort((a, b) => {
+          const statusOrder = { 'IN_PROGRESS': 1, 'PENDING': 2, 'COMPLETED': 3 };
+          return statusOrder[a.status] - statusOrder[b.status];
+        });
+
+        setBookings(sortedBookings); // Set sorted bookings
         setTotalPages(response.data.totalPages); // totalPages is the number of available pages
         setLoading(false);
       } catch (error) {
@@ -87,7 +94,7 @@ const UserBookings = () => {
                   <td>
                     {booking.vehicle ? `${booking.vehicle.type}` : 'N/A'}
                   </td>
-                  <td>${booking.estimatedCost}</td>
+                  <td>₹{booking.estimatedCost}</td>
                   <td>
                     {booking.driver ? (
                       `${booking.driver.name} (${booking.driver.email})`
@@ -99,9 +106,9 @@ const UserBookings = () => {
                   <td>
                     <button
                       onClick={() => handleTrackClick(booking.driver?.driverId)} // Send driverId to the tracking page
-                      disabled={!booking.driver} // Disable button if no driver assigned
+                      disabled={!booking.driver || booking.status !== 'IN_PROGRESS'} // Disable button if no driver or status isn't IN_PROGRESS
                     >
-                      Check
+                      Track
                     </button>
                   </td>
                 </tr>

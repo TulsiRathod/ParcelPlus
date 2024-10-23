@@ -4,7 +4,7 @@ import com.example.ParclePlus.entity.User;
 import com.example.ParclePlus.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 @Service
 public class UserService {
 
@@ -13,7 +13,6 @@ public class UserService {
 
     // Register a new user
     public User registerUser(User user) {
-        // Check if the user already exists by email
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new IllegalArgumentException("User with this email already exists.");
         }
@@ -29,5 +28,14 @@ public class UserService {
             return user;
         }
         throw new IllegalArgumentException("Invalid email or password.");
+    }
+
+    // ** Fetch all users **
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public long getTotalUsers() {
+        return userRepository.count();
     }
 }

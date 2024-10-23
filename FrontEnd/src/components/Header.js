@@ -63,10 +63,13 @@ const Header = () => {
       {/* Desktop Navigation */}
       <nav className="desktop-nav">
         <ul>
-          <li><Link to={isLoggedIn ? (isDriver ? "/driver-home" : "/user-home") : '/'}>Home</Link></li>
+          <li><Link to={isLoggedIn ? (isDriver ? "/partner-home" : "/user-home") : '/'}>Home</Link></li>
           {/* Show Bookings for user or driver based on login type */}
           {(!isDriver && isLoggedIn) && (
               <li><Link to="/user-bookings" onClick={toggleMenu}>Bookings</Link></li>
+            )}
+            {(isDriver && isLoggedIn) && (
+              <li><Link to="/partner-jobs" onClick={toggleMenu}>Jobs</Link></li>
             )}
           {isLoggedIn ? (
             <>
@@ -87,10 +90,13 @@ const Header = () => {
       {isMenuOpen && (
         <div className={`mobile-nav`} id="mobileMenu">
           <ul>
-            <li><Link to={isLoggedIn ? (isDriver ? "/driver-home" : "/user-home") : '/'} onClick={toggleMenu}>Home</Link></li>
+            <li><Link to={isLoggedIn ? (isDriver ? "/partner-home" : "/user-home") : '/'} onClick={toggleMenu}>Home</Link></li>
             {/* Show Bookings for user or driver based on login type */}
             {(!isDriver && isLoggedIn) && (
               <li><Link to="/user-bookings" onClick={toggleMenu}>Bookings</Link></li>
+            )}
+            {(isDriver && isLoggedIn) && (
+              <li><Link to="/partner-jobs" onClick={toggleMenu}>Jobs</Link></li>
             )}
             {isLoggedIn ? (
               <>

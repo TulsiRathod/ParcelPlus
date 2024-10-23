@@ -16,12 +16,10 @@ public class Driver {
     private String email;
     private String phone;
     private String vehicleType;
-    private String licensePlate;
-    private String location; // Geography/Point type
+    private String passwordHash;  // Ensure password hashing logic is handled elsewhere
+    private String location; // Geography/Point type for future location tracking
 
-    private String passwordHash;  // Make sure this field exists
-
-    private boolean availability;
+    private boolean availability;  // For driver availability status
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

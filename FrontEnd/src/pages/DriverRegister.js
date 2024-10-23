@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select'; // Import react-select
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -7,18 +8,21 @@ const DriverRegister = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [vehicleType, setVehicleType] = useState('');
-  const [licensePlate, setLicensePlate] = useState('');
+  const [selectedVehicles, setSelectedVehicles] = useState([]); // Store selected vehicles
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [vehicles, setVehicles] = useState([]); // To store all vehicle types
+  const [vehicleOptions, setVehicleOptions] = useState([]); // Store vehicle options
 
   // Fetch all available vehicles to populate the vehicle type dropdown
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
         const response = await axios.get('http://localhost:8080/api/vehicles/all');
-        setVehicles(response.data);
+        const options = response.data.map(vehicle => ({
+          value: vehicle.type,
+          label: vehicle.type,
+        }));
+        setVehicleOptions(options);
       } catch (error) {
         console.error('Error fetching vehicles:', error);
         toast.error('Error fetching vehicle types.');
@@ -41,13 +45,15 @@ const DriverRegister = () => {
     }
 
     try {
+      // Join selected vehicle types into a comma-separated string
+      const vehicleTypeString = selectedVehicles.map(vehicle => vehicle.value).join(', ');
+
       // Call the API to register the driver
       const response = await axios.post(`http://localhost:8080/api/drivers/register`, {
         name,
         email,
         phone,
-        vehicleType,
-        licensePlate,
+        vehicleType: vehicleTypeString, // Send selected vehicle types as a comma-separated string
         passwordHash: password, // Assuming plain password, hashed on backend
       });
 
@@ -100,27 +106,17 @@ const DriverRegister = () => {
             required
           />
 
-          {/* Vehicle Type Dropdown */}
-          <select
-            value={vehicleType}
-            onChange={(e) => setVehicleType(e.target.value)}
-            required
-          >
-            <option value="">Select Vehicle Type</option>
-            {vehicles.map((vehicle) => (
-              <option key={vehicle.vehicleId} value={vehicle.type}>
-                {vehicle.type}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="text"
-            placeholder="License Plate"
-            value={licensePlate}
-            onChange={(e) => setLicensePlate(e.target.value)}
-            required
+          {/* Multi-select vehicle type using react-select */}
+          <Select
+            isMulti
+            value={selectedVehicles}
+            onChange={setSelectedVehicles}
+            options={vehicleOptions}
+            placeholder="Select Vehicle Types"
+            className="multi-select"
+            classNamePrefix="select"
           />
+
           <input
             type="password"
             placeholder="Password"

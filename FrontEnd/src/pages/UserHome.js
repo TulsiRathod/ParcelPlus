@@ -118,7 +118,7 @@ function UserHome() {
         dropoffLocation: `POINT(${dropoffLocation.lat} ${dropoffLocation.lng})`,
         pickupCity: originRef.current.value,       // Include the pickup address (new)
         dropoffCity: destinationRef.current.value, // Include the dropoff address (new)
-        status: "pending",
+        status: "PENDING",
         estimatedCost: estimatedCost || '0.00'
       };
 
@@ -232,7 +232,7 @@ function UserHome() {
                 <option value="">-- Select Vehicle --</option>
                 {vehicles.map((vehicle) => (
                   <option key={vehicle.vehicleId} value={vehicle.vehicleId}>
-                    {vehicle.type} - {vehicle.capacity}kg
+                    {vehicle.type}
                   </option>
                 ))}
               </select>
@@ -250,12 +250,12 @@ function UserHome() {
               <div className="vehicle-info">
                 <p>Vehicle Type: {selectedVehicle.type}</p>
                 <p>Capacity: {selectedVehicle.capacity} kg</p>
-                <p>Base Rate: ${selectedVehicle.baseRate}</p>
-                <p>Per Km Rate: ${selectedVehicle.perKmRate}</p>
+                <p>Base Rate:  ₹{selectedVehicle.baseRate}</p>
+                <p>Per Km Rate:  ₹{selectedVehicle.perKmRate}</p>
                 <p>Distance: {distance}</p>
                 <p>Duration: {duration}</p>
-                <p>Estimated Cost: ${estimatedCost}</p>
-                <p><h4>Total Cost: ${parseFloat(estimatedCost) + parseFloat(selectedVehicle.baseRate)}</h4></p>
+                <p>Estimated Cost:  ₹{estimatedCost}</p>
+                <p><h4>Total Cost:  ₹{parseFloat(estimatedCost) + parseFloat(selectedVehicle.baseRate)}</h4></p>
                 {/* Step 5: Confirm Booking Button */}
                 <button className="confirm-button" onClick={openConfirmModal}>Confirm Booking</button>
               </div>

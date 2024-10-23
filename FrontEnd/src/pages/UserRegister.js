@@ -22,30 +22,27 @@ const UserRegister = () => {
     }
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/users/register`, {
+      const response = await axios.post('http://localhost:8080/api/users/register', {
         name,
         email,
         phone,
-        passwordHash: password, // Assuming you send plain passwords and hash them on the backend
+        passwordHash: password,
       });
 
       console.log('User registered:', response.data);
 
-      // Display success toast
       toast.success('Registration successful! You can now login.', {
-        position: toast.POSITION.TOP_RIGHT,
+        position: "top-right",
         autoClose: 3000, // 3 seconds
       });
 
-      // Redirect to the login page after 3 seconds
       setTimeout(() => {
-        window.location.href = '/login'; // Or use useNavigate if using react-router
+        window.location.href = '/login';
       }, 3000);
     } catch (error) {
-      console.error('Error registering user:', error);
-      // Display error toast
-      toast.error('Registration failed! Please try again.', {
-        position: toast.POSITION.TOP_RIGHT,
+      console.error('Error response data:', error.response?.data);
+      toast.error(error.response?.data?.message || 'Registration failed! Please try again.', {
+        position: "top-right",
         autoClose: 3000,
       });
     }
