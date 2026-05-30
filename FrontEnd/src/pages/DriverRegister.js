@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import Select from 'react-select'; // Import react-select
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,7 +17,7 @@ const DriverRegister = () => {
   useEffect(() => {
     const fetchVehicles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/vehicles/all');
+        const response = await api.get('/vehicles/all');
         const options = response.data.map(vehicle => ({
           value: vehicle.type,
           label: vehicle.type,
@@ -49,7 +49,7 @@ const DriverRegister = () => {
       const vehicleTypeString = selectedVehicles.map(vehicle => vehicle.value).join(', ');
 
       // Call the API to register the driver
-      const response = await axios.post(`http://localhost:8080/api/drivers/register`, {
+      const response = await api.post('/drivers/register', {
         name,
         email,
         phone,

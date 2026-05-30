@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +22,7 @@ const UserRegister = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/users/register', {
+      const response = await api.post('/users/register', {
         name,
         email,
         phone,

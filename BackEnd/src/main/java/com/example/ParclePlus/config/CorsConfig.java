@@ -1,26 +1,42 @@
 package com.example.ParclePlus.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
+    /**
+     * Comma-separated list of allowed origins, supplied via the
+     * {@code app.cors.allowed-origins} property (env: CORS_ALLOWED_ORIGINS).
+     * A wildcard "*" combined with allowCredentials is invalid, so we list
+     * explicit origins instead. Consumed by the Spring Security filter chain.
+     */
+    @Value("${app.cors.allowed-origins:http://localhost:3000}")
+    private String allowedOrigins;
+
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    public CorsConfigurationSource corsConfigurationSource() {
+        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(o -> !o.isEmpty())
+                .toList();
+
         CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(origins);
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
-        config.setAllowCredentials(true); // Allow credentials (cookies, etc.)
-        config.addAllowedOriginPattern("*"); // Allow any origin (adjust to restrict)
-        config.addAllowedHeader("*"); // Allow all headers
-        config.addAllowedMethod("*"); // Allow all HTTP methods
-
-        source.registerCorsConfiguration("/**", config); // Apply to all routes
-
-        return new CorsFilter(source);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

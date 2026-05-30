@@ -14,9 +14,12 @@ const Header = () => {
 
   // Function to handle logout
   const handleLogout = () => {
-    // Clear localStorage and update login status
+    // Clear the session (token, role, identifiers) and update login status.
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
     localStorage.removeItem('userId');
     localStorage.removeItem('driverId');
+    localStorage.removeItem('vehicleType');
     setIsLoggedIn(false);
     setIsDriver(false);
     navigate('/'); // Redirect to home page after logout
@@ -43,11 +46,18 @@ const Header = () => {
       }
     };
 
-    // Listen for custom login events
+    const handleLogoutEvent = () => {
+      setIsLoggedIn(false);
+      setIsDriver(false);
+    };
+
+    // Listen for custom login/logout events
     window.addEventListener('login', handleLogin);
+    window.addEventListener('logout', handleLogoutEvent);
 
     return () => {
       window.removeEventListener('login', handleLogin);
+      window.removeEventListener('logout', handleLogoutEvent);
     };
   }, []);
 

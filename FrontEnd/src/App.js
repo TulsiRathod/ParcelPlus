@@ -18,6 +18,7 @@ import DriverJobs from './pages/DriverJobs';
 import VehicleManagement from './pages/VehicleManagement';
 import DriverManagement from './pages/DriverManagement';
 import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -32,14 +33,19 @@ function App() {
             <Route path="/register" element={<UserRegister />} />
             <Route path="/partner-login" element={<DriverLogin />} />
             <Route path="/partner-register" element={<DriverRegister />} />
-            <Route path="/user-home" element={<UserHome />} />
-            <Route path="/user-bookings" element={<UserBookings />} />
-            <Route path="/partner-home" element={<DriverHome />} />
-            <Route path="/track-driver" element={<UserTrackDriver />} />
-            <Route path="/partner-jobs" element={<DriverJobs />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin-vehicle" element={<VehicleManagement />} />
-            <Route path="/admin-driver" element={<DriverManagement />} />
+            {/* Authenticated user routes */}
+            <Route path="/user-home" element={<ProtectedRoute><UserHome /></ProtectedRoute>} />
+            <Route path="/user-bookings" element={<ProtectedRoute><UserBookings /></ProtectedRoute>} />
+            <Route path="/track-driver" element={<ProtectedRoute><UserTrackDriver /></ProtectedRoute>} />
+
+            {/* Authenticated driver routes */}
+            <Route path="/partner-home" element={<ProtectedRoute><DriverHome /></ProtectedRoute>} />
+            <Route path="/partner-jobs" element={<ProtectedRoute><DriverJobs /></ProtectedRoute>} />
+
+            {/* Admin-only routes */}
+            <Route path="/admin" element={<ProtectedRoute requiredRole="ADMIN"><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin-vehicle" element={<ProtectedRoute requiredRole="ADMIN"><VehicleManagement /></ProtectedRoute>} />
+            <Route path="/admin-driver" element={<ProtectedRoute requiredRole="ADMIN"><DriverManagement /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

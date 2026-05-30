@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
@@ -18,11 +18,10 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // Replace the URLs with your actual backend API endpoints
-      const completedBookingsResponse = await axios.get('http://localhost:8080/api/bookings/completed/count');
-      const driversResponse = await axios.get('http://localhost:8080/api/drivers/count');
-      const usersResponse = await axios.get('http://localhost:8080/api/users/count');
-      const vehiclesResponse = await axios.get('http://localhost:8080/api/vehicles/count');
+      const completedBookingsResponse = await api.get('/bookings/completed/count');
+      const driversResponse = await api.get('/drivers/count');
+      const usersResponse = await api.get('/users/count');
+      const vehiclesResponse = await api.get('/vehicles/count');
 
       setDashboardData({
         completedBookings: completedBookingsResponse.data,

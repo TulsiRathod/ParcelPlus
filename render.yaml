@@ -1,0 +1,80 @@
+# Render Blueprint for ParcelPlus.
+# Deploy via Render dashboard: New + > Blueprint > pick this repo.
+# See DEPLOY.md for the full walkthrough (some values must be set after the
+# first deploy because the public URLs are not known until then).
+
+databases:
+  - name: parcelplus-db
+    databaseName: parcelplus
+    user: parcelplus
+    plan: free          # free Postgres expires ~90 days; upgrade for production
+
+services:
+  # ---------------- Backend (Spring Boot, Docker) ----------------
+  - type: web
+    name: parcelplus-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./BackEnd/Dockerfile
+    dockerContext: ./BackEnd
+    envVars:
+      # Database connection, pulled from the managed Postgres above
+      - key: DB_HOST
+        fromDatabase:
+          name: parcelplus-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: parcelplus-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: parcelplus-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: parcelplus-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: parcelplus-db
+          property: password
+      - key: DB_SSLMODE
+        value: require
+      - key: JPA_DDL_AUTO
+        value: update           # switch to "validate" once schema is stable
+      - key: JPA_SHOW_SQL
+        value: "false"
+      # Strong signing secret generated and stored by Render
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRATION_MS
+        value: "86400000"
+      # Set to the frontend's URL after first deploy (see DEPLOY.md)
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+
+  # ---------------- Frontend (React, static site) ----------------
+  - type: web
+    name: parcelplus-frontend
+    runtime: static
+    rootDir: FrontEnd
+    # CI=false so CRA lint warnings don't fail the production build
+    buildCommand: npm ci && CI=false npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: NODE_VERSION
+        value: "18.20.4"
+      # All three are baked in at build time — set them before/at first deploy,
+      # then trigger a redeploy if you change them (see DEPLOY.md).
+      - key: REACT_APP_API_BASE_URL
+        sync: false      # e.g. https://parcelplus-backend.onrender.com/api
+      - key: REACT_APP_WS_BASE_URL
+        sync: false      # e.g. wss://parcelplus-backend.onrender.com
+      - key: REACT_APP_GOOGLE_MAPS_API_KEY
+        sync: false      # your restricted Maps JS API key
+    # SPA fallback so client-side routes (e.g. /admin) resolve to index.html
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
