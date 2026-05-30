@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom'; // Import navigate for redirection
 
 const DriverHome = () => {
@@ -25,7 +25,7 @@ const DriverHome = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/bookings/without-driver`, {
+      const response = await api.get('/bookings/without-driver', {
         params: { page, size: pageSize },
       });
 
@@ -50,7 +50,7 @@ const DriverHome = () => {
   const handleAcceptJob = async (bookingId) => {
     try {
       const driverId = localStorage.getItem('driverId'); // Driver ID from localStorage
-      await axios.put(`${process.env.REACT_APP_API_BASE_URL}/bookings/${bookingId}/assign-driver/${driverId}`);
+      await api.put(`/bookings/${bookingId}/assign-driver/${driverId}`);
 
       // Save the current booking ID in localStorage
       localStorage.setItem('currentBookingId', bookingId);
@@ -96,7 +96,11 @@ const DriverHome = () => {
                   <td>{booking.dropoffCity || booking.dropoffLocation}</td>
                   <td>{booking.vehicle.type}</td>
                   <td>₹{booking.estimatedCost}</td>
-                  <td>{booking.status}</td>
+                  <td>
+                    <span className={`badge status-${(booking.status || '').toLowerCase()}`}>
+                      {booking.status?.replace('_', ' ').toLowerCase()}
+                    </span>
+                  </td>
                   <td>
                     <button onClick={() => handleAcceptJob(booking.bookingId)}>Accept Job</button>
                   </td>

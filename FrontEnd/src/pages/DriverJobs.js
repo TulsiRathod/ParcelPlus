@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import { WS_BASE_URL } from '../api';
+import api, { WS_BASE_URL } from '../api';
 import { toast } from 'react-toastify';
 
 const DriverJobs = () => {
@@ -48,7 +47,7 @@ const DriverJobs = () => {
   const fetchJobs = async (page) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/bookings/driver/${driverId}`, {
+      const response = await api.get(`/bookings/driver/${driverId}`, {
         params: { page, size: pageSize },
       });
       
@@ -73,9 +72,7 @@ const DriverJobs = () => {
 
   const handleStatusChange = async (bookingId, newStatus) => {
     try {
-      await axios.put(`${process.env.REACT_APP_API_BASE_URL}/bookings/${bookingId}/update-status`, { status: newStatus }, {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      await api.put(`/bookings/${bookingId}/update-status`, { status: newStatus });
       fetchJobs(currentPage); // Refresh the jobs after status change
     } catch (error) {
       console.error('Error updating job status:', error);
@@ -168,7 +165,11 @@ const DriverJobs = () => {
                   <td>{job.dropoffCity || job.dropoffLocation}</td>
                   <td>{job.vehicle.type}</td>
                   <td> ₹{job.estimatedCost}</td>
-                  <td>{job.status}</td>
+                  <td>
+                    <span className={`badge status-${(job.status || '').toLowerCase()}`}>
+                      {job.status?.replace('_', ' ').toLowerCase()}
+                    </span>
+                  </td>
                   <td>
                     {job.status === 'PENDING' && (
                       <button className="process-button" onClick={() => handleStatusChange(job.bookingId, 'IN_PROGRESS')}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const UserBookings = () => {
@@ -16,7 +16,7 @@ const UserBookings = () => {
     const fetchBookings = async () => {
       try {
         const userId = localStorage.getItem('userId'); // Assuming the userId is stored in localStorage
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/bookings/user/${userId}`, {
+        const response = await api.get(`/bookings/user/${userId}`, {
           params: {
             page: currentPage,
             size: bookingsPerPage
@@ -102,7 +102,11 @@ const UserBookings = () => {
                       'Not assigned yet'
                     )}
                   </td>
-                  <td>{booking.status}</td>
+                  <td>
+                    <span className={`badge status-${(booking.status || '').toLowerCase()}`}>
+                      {booking.status?.replace('_', ' ').toLowerCase()}
+                    </span>
+                  </td>
                   <td>
                     <button
                       onClick={() => handleTrackClick(booking.driver?.driverId)} // Send driverId to the tracking page

@@ -1,7 +1,7 @@
 /* global google */
 import React, { useRef, useState, useEffect } from 'react';
 import { useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer } from '@react-google-maps/api';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'; // Assuming you use react-toastify for notifications
 
@@ -40,7 +40,7 @@ function UserHome() {
   useEffect(() => {
     async function fetchVehicles() {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/vehicles/all`);
+        const response = await api.get('/vehicles/all');
         setVehicles(response.data || []); // Ensure vehicles is an array, handle undefined response
       } catch (error) {
         console.error('Error fetching vehicles:', error);
@@ -122,7 +122,7 @@ function UserHome() {
         estimatedCost: estimatedCost || '0.00'
       };
 
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/bookings/create`, bookingData);
+      const response = await api.post('/bookings/create', bookingData);
       toast.success('Booking confirmed!');
       console.log('Booking response:', response.data);
 
