@@ -64,7 +64,7 @@ services:
     staticPublishPath: ./build
     envVars:
       - key: NODE_VERSION
-        value: "18.20.4"
+        value: "20.18.0"
       # All three are baked in at build time — set them before/at first deploy,
       # then trigger a redeploy if you change them (see DEPLOY.md).
       - key: REACT_APP_API_BASE_URL
