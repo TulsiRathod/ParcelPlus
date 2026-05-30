@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import { useLocation } from 'react-router-dom';
+import { WS_BASE_URL } from '../api';
 
 const UserTrackDriver = () => {
   const [driverLocation, setDriverLocation] = useState(null);
@@ -20,7 +21,7 @@ const UserTrackDriver = () => {
     }
 
     // Initialize WebSocket connection
-    socket.current = new WebSocket('ws://localhost:8080/ws/track');
+    socket.current = new WebSocket(`${WS_BASE_URL}/ws/track`);
 
     socket.current.onopen = () => {
       console.log('WebSocket connection established for tracking driver.');

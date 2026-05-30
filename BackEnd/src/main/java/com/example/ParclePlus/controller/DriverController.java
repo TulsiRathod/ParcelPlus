@@ -1,11 +1,16 @@
 package com.example.ParclePlus.controller;
 
+import com.example.ParclePlus.dto.AuthResponse;
+import com.example.ParclePlus.dto.LoginRequest;
 import com.example.ParclePlus.entity.Driver;
+import com.example.ParclePlus.security.JwtService;
 import com.example.ParclePlus.service.DriverService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/drivers")
@@ -14,16 +19,23 @@ public class DriverController {
     @Autowired
     private DriverService driverService;
 
+    @Autowired
+    private JwtService jwtService;
+
     // Register endpoint (Create)
     @PostMapping("/register")
-    public Driver registerDriver(@RequestBody Driver driver) {
+    public Driver registerDriver(@Valid @RequestBody Driver driver) {
         return driverService.registerDriver(driver);
     }
 
-    // Login endpoint
+    // Login endpoint — verifies credentials and returns a JWT.
     @PostMapping("/login")
-    public Driver loginDriver(@RequestParam String email, @RequestParam String passwordHash) {
-        return driverService.loginDriver(email, passwordHash);
+    public AuthResponse loginDriver(@Valid @RequestBody LoginRequest request) {
+        Driver driver = driverService.loginDriver(request.getEmail(), request.getPassword());
+        String token = jwtService.generateToken(driver.getEmail(),
+                Map.of("role", "DRIVER", "id", driver.getDriverId(), "type", "DRIVER"));
+        return new AuthResponse(token, "DRIVER", null, driver.getDriverId(),
+                driver.getName(), driver.getEmail(), driver.getVehicleType());
     }
 
     // Get driver by ID endpoint (Read)

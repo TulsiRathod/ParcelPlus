@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { WS_BASE_URL } from '../api';
 import { toast } from 'react-toastify';
 
 const DriverJobs = () => {
@@ -18,7 +19,7 @@ const DriverJobs = () => {
   useEffect(() => {
     fetchJobs(currentPage);
     // Initialize WebSocket connection for location sharing
-    socket.current = new WebSocket('ws://localhost:8080/ws/track');
+    socket.current = new WebSocket(`${WS_BASE_URL}/ws/track`);
     
     socket.current.onopen = () => {
       console.log('WebSocket connection established for driver.');

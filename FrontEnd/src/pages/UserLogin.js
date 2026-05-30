@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,33 +13,25 @@ const UserLogin = () => {
     e.preventDefault();
   
     try {
-      const formData = new URLSearchParams();
-      formData.append('email', email);
-      formData.append('passwordHash', password); // Assuming plain password, hashed on backend
-  
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/users/login`, formData);
-      console.log('User logged in:', response.data);
-  
-      // Assuming the userId is part of the response data
-      const userId = response.data.userId;
-  
-      // Save userId in localStorage
-      // In your login handler:
-      localStorage.removeItem('userId');
+      const response = await api.post('/users/login', { email, password });
+
+      const { token, role, userId } = response.data;
+
+      // Reset any previous session, then store the new credentials.
       localStorage.removeItem('driverId');
+      localStorage.removeItem('vehicleType');
+      localStorage.setItem('token', token);
+      localStorage.setItem('role', role);
       localStorage.setItem('userId', userId);
       window.dispatchEvent(new Event('login')); // Trigger the login event
 
-      // Display success toast
       toast.success('Login successful!', {
-        position: 'top-right', // Use string instead of toast.POSITION.TOP_RIGHT
-        autoClose: 3000, // 3 seconds
+        position: 'top-right',
+        autoClose: 2000,
       });
-  
-      // Redirect to the after login page after 3 seconds
-      setTimeout(() => {
-        navigate('/user-home');
-      }, 3000);
+
+      // Admins land on the dashboard; everyone else on the user home.
+      navigate(role === 'ADMIN' ? '/admin' : '/user-home');
     } catch (error) {
       console.error('Error logging in user:', error);
       // Display error toast

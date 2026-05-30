@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const VehicleManagement = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -20,7 +20,7 @@ const VehicleManagement = () => {
 
   const fetchVehicles = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/vehicles/all');
+      const response = await api.get('/vehicles/all');
       setVehicles(response.data);
     } catch (error) {
       console.error('Error fetching vehicles:', error);
@@ -47,7 +47,7 @@ const VehicleManagement = () => {
 
   const handleDeleteVehicle = async (vehicleId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/vehicles/${vehicleId}`);
+      await api.delete(`/vehicles/${vehicleId}`);
       fetchVehicles(); // Refresh the list after deletion
     } catch (error) {
       console.error('Error deleting vehicle:', error);
@@ -59,10 +59,10 @@ const VehicleManagement = () => {
     try {
       if (editMode) {
         // Update vehicle
-        await axios.put(`http://localhost:8080/api/vehicles/${vehicleForm.vehicleId}`, vehicleForm);
+        await api.put(`/vehicles/${vehicleForm.vehicleId}`, vehicleForm);
       } else {
         // Add new vehicle
-        await axios.post('http://localhost:8080/api/vehicles/add', vehicleForm);
+        await api.post('/vehicles/add', vehicleForm);
       }
       setShowModal(false);
       fetchVehicles(); // Refresh the list

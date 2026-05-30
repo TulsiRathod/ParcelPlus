@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import Select from 'react-select'; // Import react-select
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,7 +26,7 @@ const DriverManagement = () => {
 
   const fetchDrivers = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/drivers/all');
+      const response = await api.get('/drivers/all');
       setDrivers(response.data);
     } catch (error) {
       console.error('Error fetching drivers:', error);
@@ -36,7 +36,7 @@ const DriverManagement = () => {
 
   const fetchVehicles = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/vehicles/all');
+      const response = await api.get('/vehicles/all');
       const options = response.data.map(vehicle => ({
         value: vehicle.type,
         label: vehicle.type,
@@ -95,7 +95,7 @@ const DriverManagement = () => {
     try {
       if (isEditMode) {
         // Edit existing driver only
-        await axios.put(`http://localhost:8080/api/drivers/${formData.driverId}`, {
+        await api.put(`/drivers/${formData.driverId}`, {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
@@ -114,7 +114,7 @@ const DriverManagement = () => {
 
   const handleDeleteDriver = async (driverId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/drivers/${driverId}`);
+      await api.delete(`/drivers/${driverId}`);
       toast.success('Driver deleted successfully');
       fetchDrivers();
     } catch (error) {
