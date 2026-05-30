@@ -50,9 +50,11 @@ services:
         generateValue: true
       - key: JWT_EXPIRATION_MS
         value: "86400000"
-      # Set to the frontend's URL after first deploy (see DEPLOY.md)
+      # Allowed browser origin(s) for the API. Comma-separated; supports
+      # patterns like https://*.onrender.com. Override in the dashboard if your
+      # frontend URL differs.
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: https://parcelplus-frontend.onrender.com
 
   # ---------------- Frontend (React, static site) ----------------
   - type: web

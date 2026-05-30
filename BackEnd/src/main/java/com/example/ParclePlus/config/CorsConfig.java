@@ -31,7 +31,9 @@ public class CorsConfig {
 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(origins);
+        // Use patterns so values like "https://*.onrender.com" are supported
+        // (and exact origins still match). Required for wildcards with credentials.
+        config.setAllowedOriginPatterns(origins);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
